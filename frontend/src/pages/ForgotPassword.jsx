@@ -1,24 +1,35 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Truck, Loader2, ArrowLeft, Lock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Truck, Loader2, ArrowLeft, Lock, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../services/api';
 import './Auth.css';
 
 export default function ForgotPassword() {
-    const [email, setEmail] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    const passedEmail = location.state?.email || '';
+
+    const [email, setEmail] = useState(passedEmail);
     const [otp, setOtp] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [step, setStep] = useState(1); // 1: email, 2: otp, 3: password
+    const [step, setStep] = useState(passedEmail ? 1 : 0); // 0: no email (redirect), 1: confirm email, 2: otp+password
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        // If no email was passed from login page, show error and redirect
+        if (!passedEmail) {
+            toast.error('Please enter your email on the login page first');
+            navigate('/login');
+        }
+    }, [passedEmail, navigate]);
 
     const handleRequestOTP = async (e) => {
         e.preventDefault();
 
         if (!email) {
-            toast.error('Please enter your email');
+            toast.error('Email is required');
             return;
         }
 
@@ -59,6 +70,11 @@ export default function ForgotPassword() {
         }
     };
 
+    // Don't render if no email (will redirect)
+    if (!passedEmail) {
+        return null;
+    }
+
     return (
         <div className="auth-page">
             <div className="auth-container">
@@ -73,7 +89,7 @@ export default function ForgotPassword() {
                         </div>
                         <h1>Reset Password</h1>
                         <p>
-                            {step === 1 && 'Enter your email to receive a password reset OTP'}
+                            {step === 1 && 'Confirm your email to receive a password reset OTP'}
                             {step === 2 && 'Enter the OTP sent to your email and new password'}
                         </p>
                     </div>
@@ -82,15 +98,20 @@ export default function ForgotPassword() {
                         <form onSubmit={handleRequestOTP} className="auth-form">
                             <div className="input-group">
                                 <label htmlFor="email">Email Address</label>
-                                <input
-                                    id="email"
-                                    type="email"
-                                    className="input"
-                                    placeholder="Enter your email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
+                                <div className="email-display">
+                                    <Mail size={18} />
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        className="input"
+                                        value={email}
+                                        readOnly
+                                        disabled
+                                    />
+                                </div>
+                                <p className="input-hint">
+                                    OTP will be sent to this email address
+                                </p>
                             </div>
 
                             <button
@@ -112,6 +133,14 @@ export default function ForgotPassword() {
 
                     {step === 2 && (
                         <form onSubmit={handleResetPassword} className="auth-form">
+                            <div className="input-group">
+                                <label>Email</label>
+                                <div className="email-display locked">
+                                    <Mail size={18} />
+                                    <span>{email}</span>
+                                </div>
+                            </div>
+
                             <div className="input-group">
                                 <label htmlFor="otp">OTP Code</label>
                                 <input
@@ -178,3 +207,4 @@ export default function ForgotPassword() {
         </div>
     );
 }
+

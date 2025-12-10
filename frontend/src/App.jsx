@@ -22,6 +22,7 @@ import Dashboard from './pages/Dashboard';
 import MyBookings from './pages/MyBookings';
 import BookingDetail from './pages/BookingDetail';
 import Profile from './pages/Profile';
+import ChangePassword from './pages/ChangePassword';
 
 // Owner Pages
 import MyEquipment from './pages/owner/MyEquipment';
@@ -102,6 +103,7 @@ function App() {
                     <Route path="/bookings" element={<MyBookings />} />
                     <Route path="/bookings/:id" element={<BookingDetail />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/change-password" element={<ChangePassword />} />
                 </Route>
 
                 {/* Owner Routes */}

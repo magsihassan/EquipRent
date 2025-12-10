@@ -372,3 +372,42 @@
 .mt-4 {
     margin-top: var(--space-4);
 }
+
+/* Email Display (Locked) */
+.email-display {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+}
+
+.email-display svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.email-display .input {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--text-secondary);
+}
+
+.email-display.locked {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: rgba(14, 165, 233, 0.3);
+}
+
+.email-display.locked span {
+    font-weight: 500;
+}
+
+.input-hint {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-2);
+}

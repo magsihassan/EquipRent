@@ -101,7 +101,13 @@ export default function Login() {
                             <Link to="/register" className="auth-link">Create one</Link>
                         </p>
                         <p className="forgot-password">
-                            <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
+                            <Link
+                                to="/forgot-password"
+                                state={{ email: email }}
+                                className="auth-link"
+                            >
+                                Forgot Password?
+                            </Link>
                         </p>
                     </div>
 

@@ -124,4 +124,22 @@ router.post('/change-password',
     authController.changePassword
 );
 
+// Request OTP for password change
+router.post('/request-password-change-otp',
+    authenticate,
+    authController.requestPasswordChangeOTP
+);
+
+// Change password with OTP
+router.post('/change-password-otp',
+    authenticate,
+    [
+        body('otp').isLength({ min: 6, max: 6 }),
+        body('newPassword').isLength({ min: 6 })
+    ],
+    validate,
+    authController.changePasswordWithOTP
+);
+
 module.exports = router;
+

@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store';
-import { User, Mail, Phone, MapPin, Building, Save, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Building, Save, Loader2, Shield, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import './Profile.css';
 
@@ -196,6 +197,25 @@ export default function Profile() {
                             </div>
                         )}
                     </form>
+                </div>
+
+                {/* Security Section */}
+                <div className="profile-card security-card">
+                    <div className="card-header">
+                        <h2>Security</h2>
+                    </div>
+                    <div className="security-content">
+                        <Link to="/change-password" className="security-item">
+                            <div className="security-item-icon">
+                                <Shield size={20} />
+                            </div>
+                            <div className="security-item-info">
+                                <h3>Change Password</h3>
+                                <p>Update your password using OTP or current password</p>
+                            </div>
+                            <ChevronRight size={20} className="security-item-arrow" />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

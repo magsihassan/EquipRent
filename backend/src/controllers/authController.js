@@ -709,6 +709,112 @@ const changePassword = async (req, res, next) => {
     }
 };
 
+// Request OTP for password change (authenticated users)
+const requestPasswordChangeOTP = async (req, res, next) => {
+    try {
+        // Get user details
+        const result = await query(
+            'SELECT id, email, first_name FROM users WHERE id = $1',
+            [req.user.id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                error: { message: 'User not found' }
+            });
+        }
+
+        const user = result.rows[0];
+
+        // Generate OTP
+        const otp = generateOTP();
+        const otpExpiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
+
+        // Save OTP to database
+        await query(
+            `UPDATE users SET otp_code = $1, otp_expires_at = $2, otp_purpose = 'password_change' WHERE id = $3`,
+            [otp, otpExpiresAt, user.id]
+        );
+
+        // Send OTP email
+        const emailContent = emailTemplates.passwordResetOtp(otp, user.first_name);
+        await sendEmail({
+            to: user.email,
+            subject: 'Password Change OTP - EquipRent',
+            html: emailContent.html
+        });
+
+        res.json({
+            success: true,
+            message: 'OTP sent to your registered email'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Change password with OTP (authenticated users)
+const changePasswordWithOTP = async (req, res, next) => {
+    try {
+        const { otp, newPassword } = req.body;
+
+        // Get user with OTP details
+        const result = await query(
+            `SELECT id, otp_code, otp_expires_at, otp_purpose FROM users WHERE id = $1`,
+            [req.user.id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                error: { message: 'User not found' }
+            });
+        }
+
+        const user = result.rows[0];
+
+        // Verify OTP
+        if (user.otp_code !== otp) {
+            return res.status(400).json({
+                success: false,
+                error: { message: 'Invalid OTP' }
+            });
+        }
+
+        if (new Date() > new Date(user.otp_expires_at)) {
+            return res.status(400).json({
+                success: false,
+                error: { message: 'OTP has expired. Please request a new one.' }
+            });
+        }
+
+        if (user.otp_purpose !== 'password_change') {
+            return res.status(400).json({
+                success: false,
+                error: { message: 'Invalid OTP purpose' }
+            });
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(newPassword, salt);
+
+        // Update password and clear OTP
+        await query(
+            `UPDATE users SET password_hash = $1, otp_code = NULL, otp_expires_at = NULL, otp_purpose = NULL WHERE id = $2`,
+            [passwordHash, user.id]
+        );
+
+        res.json({
+            success: true,
+            message: 'Password changed successfully'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     register,
     verifyOTP,
@@ -721,5 +827,7 @@ module.exports = {
     uploadCNIC,
     uploadCNICPublic,
     uploadProfileImage,
-    changePassword
+    changePassword,
+    requestPasswordChangeOTP,
+    changePasswordWithOTP
 };
