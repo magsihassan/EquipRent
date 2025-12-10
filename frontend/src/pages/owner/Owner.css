@@ -1,0 +1,351 @@
+/* Owner Pages Styles */
+.my-equipment-page,
+.add-equipment-page,
+.owner-bookings-page {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-6);
+}
+
+.page-header h1 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-1);
+}
+
+.page-header p {
+    color: var(--text-secondary);
+}
+
+/* Equipment Table */
+.equipment-table-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.equipment-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.equipment-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--text-muted);
+}
+
+.equipment-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.equipment-title {
+    display: block;
+    font-weight: 500;
+}
+
+.equipment-location {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.toggle-on {
+    color: var(--success);
+}
+
+.toggle-off {
+    color: var(--text-muted);
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.action-btn.view {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--info);
+}
+
+.action-btn.edit {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warning);
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Quantity Info */
+.quantity-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.quantity-info span.available {
+    color: var(--success);
+    font-weight: 500;
+}
+
+.quantity-info span.unavailable {
+    color: var(--error);
+    font-weight: 500;
+}
+
+.quantity-info small {
+    color: var(--text-muted);
+    font-size: var(--font-size-xs);
+}
+
+/* Add Equipment Form */
+.equipment-form {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.form-section {
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.form-section h2 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-4);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+.form-grid .full-width {
+    grid-column: span 3;
+}
+
+/* Options */
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.checkbox-option {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.checkbox-option:hover {
+    background: var(--gray-700);
+}
+
+.checkbox-option input {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    accent-color: var(--primary-500);
+}
+
+.checkbox-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox-title {
+    font-weight: 500;
+}
+
+.checkbox-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+/* Image Upload */
+.image-upload-area {
+    margin-bottom: var(--space-4);
+}
+
+.upload-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-8);
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--text-muted);
+}
+
+.upload-zone:hover {
+    border-color: var(--primary-500);
+    color: var(--primary-400);
+}
+
+.upload-hint {
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-2);
+}
+
+.image-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-3);
+}
+
+.image-preview {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-image {
+    position: absolute;
+    top: var(--space-1);
+    right: var(--space-1);
+    width: 24px;
+    height: 24px;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Specifications */
+.spec-input-row {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.spec-input-row .input {
+    flex: 1;
+}
+
+.specs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+}
+
+.spec-tag {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+}
+
+.spec-tag button {
+    color: var(--text-muted);
+}
+
+.spec-tag button:hover {
+    color: var(--error);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Owner Bookings */
+.owner-booking .quick-actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-sm {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-sm);
+}
+
+.renter-info {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid .full-width {
+        grid-column: 1;
+    }
+
+    .image-preview-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+    }
+}

@@ -1,0 +1,231 @@
+.booking-detail-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-6);
+    transition: color var(--transition-fast);
+}
+
+.back-btn:hover {
+    color: var(--text-primary);
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-6);
+}
+
+.booking-number {
+    font-size: var(--font-size-sm);
+    color: var(--primary-400);
+    font-weight: 500;
+}
+
+.detail-header h1 {
+    font-size: var(--font-size-2xl);
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.status-badge.pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.status-badge.approved {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.status-badge.rejected {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.status-badge.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.status-badge.completed {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.status-badge.cancelled {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+}
+
+.status-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Detail Grid */
+.detail-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.detail-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+}
+
+.detail-card h2 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-4);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+}
+
+.info-item {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+}
+
+.info-item svg {
+    color: var(--primary-400);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-item .label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.info-item .value {
+    font-weight: 500;
+}
+
+.notes-section {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+}
+
+.notes-section h3 {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+}
+
+.notes-section p {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.notes-section.rejection {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Contact */
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.contact-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: var(--font-size-lg);
+}
+
+.contact-details h3 {
+    font-size: var(--font-size-base);
+}
+
+.contact-details .company {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.contact-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.contact-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.contact-btn:hover {
+    background: var(--primary-600);
+    color: white;
+}
+
+/* Actions Card */
+.actions-card p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--space-3);
+}
+
+@media (max-width: 640px) {
+    .detail-header {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+}
