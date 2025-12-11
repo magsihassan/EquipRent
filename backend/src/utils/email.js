@@ -2,12 +2,22 @@ const nodemailer = require('nodemailer');
 
 // Create transporter
 const createTransporter = () => {
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT) || 587;
+  const user = process.env.SMTP_USER;
+
+  console.log('📧 SMTP Config:', {
+    host,
+    port,
+    user: user ? user.substring(0, 3) + '***' : 'Not Set'
+  });
+
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT) || 587,
+    host: host,
+    port: port,
     secure: false,
     auth: {
-      user: process.env.SMTP_USER,
+      user: user,
       pass: process.env.SMTP_PASS
     }
   });
