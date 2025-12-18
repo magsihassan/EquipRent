@@ -1,8 +1,18 @@
 import axios from 'axios';
 
-// Use environment variable for production, fallback to '/api' for development
 // Use environment variable for production, fallback to Railway URL directly
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://equiprent-production.up.railway.app';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://equiprent-production.up.railway.app';
+
+// Helper function to get correct image URL (handles both Cloudinary and local paths)
+export const getImageUrl = (path) => {
+    if (!path) return null;
+    // If it's already a full URL (Cloudinary), return as-is
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+        return path;
+    }
+    // Otherwise, prepend the API base URL for local paths
+    return `${API_BASE_URL}${path}`;
+};
 
 const api = axios.create({
     baseURL: `${API_BASE_URL}/api`,

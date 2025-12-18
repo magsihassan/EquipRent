@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useEquipmentStore, useAuthStore } from '../store';
+import { getImageUrl } from '../services/api';
 import {
     Search, ArrowRight, Shield, Clock, MapPin, Star,
     Truck, Users, CheckCircle, ChevronRight
 } from 'lucide-react';
 import './Home.css';
-
-const API_URL = 'http://localhost:5000';
 
 export default function Home() {
     const { categories, fetchCategories, equipment, fetchEquipment } = useEquipmentStore();
@@ -119,7 +118,7 @@ export default function Home() {
                             <Link key={item.id} to={`/equipment/${item.id}`} className="equipment-card">
                                 <div className="equipment-image">
                                     {item.primary_image ? (
-                                        <img src={`${API_URL}${item.primary_image}`} alt={item.title} />
+                                        <img src={getImageUrl(item.primary_image)} alt={item.title} />
                                     ) : (
                                         <div className="no-image">
                                             <Truck size={40} />

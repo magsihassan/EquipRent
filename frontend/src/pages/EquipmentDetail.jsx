@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEquipmentStore, useAuthStore, useBookingStore } from '../store';
+import { getImageUrl } from '../services/api';
 import { format, addDays } from 'date-fns';
 import toast from 'react-hot-toast';
 import {
@@ -8,8 +9,6 @@ import {
     ChevronLeft, ChevronRight, CheckCircle, XCircle, Loader2
 } from 'lucide-react';
 import './EquipmentDetail.css';
-
-const API_URL = 'http://localhost:5000';
 
 export default function EquipmentDetail() {
     const { id } = useParams();
@@ -92,7 +91,7 @@ export default function EquipmentDetail() {
                         <div className="image-gallery">
                             <div className="main-image">
                                 {images.length > 0 ? (
-                                    <img src={`${API_URL}${images[selectedImage]?.image_url}`} alt={equipment.title} />
+                                    <img src={getImageUrl(images[selectedImage]?.image_url)} alt={equipment.title} />
                                 ) : (
                                     <div className="no-image">
                                         <Truck size={60} />
@@ -125,7 +124,7 @@ export default function EquipmentDetail() {
                                             className={`thumbnail ${i === selectedImage ? 'active' : ''}`}
                                             onClick={() => setSelectedImage(i)}
                                         >
-                                            <img src={`${API_URL}${img.image_url}`} alt={`View ${i + 1}`} />
+                                            <img src={getImageUrl(img.image_url)} alt={`View ${i + 1}`} />
                                         </button>
                                     ))}
                                 </div>

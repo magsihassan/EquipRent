@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { adminAPI } from '../../services/api';
+import { adminAPI, getImageUrl } from '../../services/api';
 import { Package, CheckCircle, XCircle, Eye, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import './Admin.css';
-
-const API_URL = 'http://localhost:5000';
 
 export default function AdminEquipment() {
     const [equipment, setEquipment] = useState([]);
@@ -72,7 +70,7 @@ export default function AdminEquipment() {
                         <div key={item.id} className="approval-card">
                             <div className="approval-image">
                                 {item.primary_image ? (
-                                    <img src={`${API_URL}${item.primary_image}`} alt={item.title} />
+                                    <img src={getImageUrl(item.primary_image)} alt={item.title} />
                                 ) : (
                                     <div className="no-image">
                                         <Package size={40} />

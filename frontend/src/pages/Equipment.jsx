@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useEquipmentStore } from '../store';
+import { getImageUrl } from '../services/api';
 import {
     Search, Filter, MapPin, Star, X, ChevronDown, Grid, List, Truck, Loader2
 } from 'lucide-react';
 import './Equipment.css';
-
-const API_URL = 'http://localhost:5000';
 
 export default function Equipment() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -207,7 +206,7 @@ export default function Equipment() {
                             <Link key={item.id} to={`/equipment/${item.id}`} className="equipment-card">
                                 <div className="equipment-image">
                                     {item.primary_image ? (
-                                        <img src={`${API_URL}${item.primary_image}`} alt={item.title} />
+                                        <img src={getImageUrl(item.primary_image)} alt={item.title} />
                                     ) : (
                                         <div className="no-image">
                                             <Truck size={40} />

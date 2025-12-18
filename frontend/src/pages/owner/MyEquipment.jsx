@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { equipmentAPI } from '../../services/api';
+import { equipmentAPI, getImageUrl } from '../../services/api';
 import { Package, Plus, Edit, Eye, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import './Owner.css';
-
-const API_URL = 'http://localhost:5000';
 
 export default function MyEquipment() {
     const [equipment, setEquipment] = useState([]);
@@ -77,7 +75,7 @@ export default function MyEquipment() {
                                         <div className="equipment-cell">
                                             <div className="equipment-thumb">
                                                 {item.primary_image ? (
-                                                    <img src={`${API_URL}${item.primary_image}`} alt={item.title} />
+                                                    <img src={getImageUrl(item.primary_image)} alt={item.title} />
                                                 ) : (
                                                     <Package size={20} />
                                                 )}

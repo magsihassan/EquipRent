@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { equipmentAPI } from '../../services/api';
+import { equipmentAPI, getImageUrl } from '../../services/api';
 import { useEquipmentStore } from '../../store';
 import { Upload, X, Loader2, Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import './Owner.css';
-
-const API_URL = 'http://localhost:5000';
 
 export default function EditEquipment() {
     const { id } = useParams();
@@ -418,7 +416,7 @@ export default function EditEquipment() {
                         <div className="image-preview-grid">
                             {existingImages.map((img) => (
                                 <div key={img.id} className="image-preview">
-                                    <img src={`${API_URL}${img.image_url}`} alt="Equipment" />
+                                    <img src={getImageUrl(img.image_url)} alt="Equipment" />
                                     <button
                                         type="button"
                                         className="remove-image"
