@@ -41,7 +41,19 @@ const sendEmail = async ({ to, subject, html, text }) => {
     text: text || html.replace(/<[^>]*>/g, '')
   };
 
-  return transporter.sendMail(mailOptions);
+  try {
+    console.log('📤 Attempting to send email to:', to);
+    const result = await transporter.sendMail(mailOptions);
+    console.log('✅ Email sent successfully:', result.messageId);
+    return result;
+  } catch (error) {
+    console.error('❌ Email send failed:', {
+      code: error.code,
+      message: error.message,
+      command: error.command
+    });
+    throw error;
+  }
 };
 
 // Email templates
