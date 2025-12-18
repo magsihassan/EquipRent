@@ -335,6 +335,8 @@ const resetPassword = async (req, res, next) => {
 // Upload CNIC (for registration)
 const uploadCNIC = async (req, res, next) => {
     try {
+        const { uploadToCloudinary, useCloudinary } = require('../middleware/upload');
+
         // multer.fields() gives req.files as an object like { cnicFront: [...], cnicBack: [...] }
         if (!req.files || (!req.files.cnicFront && !req.files.cnicBack)) {
             return res.status(400).json({
@@ -346,10 +348,18 @@ const uploadCNIC = async (req, res, next) => {
         const updates = {};
 
         if (req.files.cnicFront && req.files.cnicFront[0]) {
-            updates.cnic_front_image = `/uploads/cnic/${req.files.cnicFront[0].filename}`;
+            if (useCloudinary) {
+                updates.cnic_front_image = await uploadToCloudinary(req.files.cnicFront[0].path, 'cnic');
+            } else {
+                updates.cnic_front_image = `/uploads/cnic/${req.files.cnicFront[0].filename}`;
+            }
         }
         if (req.files.cnicBack && req.files.cnicBack[0]) {
-            updates.cnic_back_image = `/uploads/cnic/${req.files.cnicBack[0].filename}`;
+            if (useCloudinary) {
+                updates.cnic_back_image = await uploadToCloudinary(req.files.cnicBack[0].path, 'cnic');
+            } else {
+                updates.cnic_back_image = `/uploads/cnic/${req.files.cnicBack[0].filename}`;
+            }
         }
 
         if (Object.keys(updates).length === 0) {
@@ -644,6 +654,8 @@ const updateProfile = async (req, res, next) => {
 // Upload profile image
 const uploadProfileImage = async (req, res, next) => {
     try {
+        const { uploadToCloudinary, useCloudinary } = require('../middleware/upload');
+
         if (!req.file) {
             return res.status(400).json({
                 success: false,
@@ -651,7 +663,13 @@ const uploadProfileImage = async (req, res, next) => {
             });
         }
 
-        const imageUrl = `/uploads/profiles/${req.file.filename}`;
+        // Upload to Cloudinary if configured
+        let imageUrl;
+        if (useCloudinary) {
+            imageUrl = await uploadToCloudinary(req.file.path, 'profiles');
+        } else {
+            imageUrl = `/uploads/profiles/${req.file.filename}`;
+        }
 
         await query(
             'UPDATE users SET profile_image = $1 WHERE id = $2',

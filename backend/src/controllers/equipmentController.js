@@ -394,6 +394,7 @@ const deleteEquipment = async (req, res, next) => {
 const uploadImages = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const { uploadToCloudinary, useCloudinary } = require('../middleware/upload');
 
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({
@@ -428,11 +429,19 @@ const uploadImages = async (req, res, next) => {
             const file = req.files[i];
             const isPrimary = currentCount === 0 && i === 0;
 
+            // Upload to Cloudinary if configured, otherwise use local path
+            let imageUrl;
+            if (useCloudinary) {
+                imageUrl = await uploadToCloudinary(file.path, 'equipment');
+            } else {
+                imageUrl = `/uploads/equipment/${file.filename}`;
+            }
+
             const result = await query(
                 `INSERT INTO equipment_images (equipment_id, image_url, is_primary, sort_order)
          VALUES ($1, $2, $3, $4)
          RETURNING *`,
-                [id, `/uploads/equipment/${file.filename}`, isPrimary, currentCount + i]
+                [id, imageUrl, isPrimary, currentCount + i]
             );
             insertedImages.push(result.rows[0]);
         }
