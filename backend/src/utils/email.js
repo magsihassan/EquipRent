@@ -1,6 +1,56 @@
 const nodemailer = require('nodemailer');
 
-// Create transporter
+// Brevo API endpoint
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
+
+// Send email using Brevo HTTP API (bypasses SMTP port blocking)
+const sendEmailViaAPI = async ({ to, subject, html, text }) => {
+  const apiKey = process.env.BREVO_API_KEY;
+
+  if (!apiKey) {
+    console.log('⚠️ BREVO_API_KEY not set, falling back to SMTP');
+    return null; // Signal to use SMTP fallback
+  }
+
+  const payload = {
+    sender: {
+      email: process.env.EMAIL_FROM || 'noreply@equiprent.com',
+      name: 'EquipRent'
+    },
+    to: [{ email: to }],
+    subject: subject,
+    htmlContent: html,
+    textContent: text || html.replace(/<[^>]*>/g, '')
+  };
+
+  try {
+    console.log('📤 Sending email via Brevo API to:', to);
+
+    const response = await fetch(BREVO_API_URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'api-key': apiKey
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Brevo API error: ${errorData.message || response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log('✅ Email sent successfully via API:', result.messageId);
+    return { messageId: result.messageId };
+  } catch (error) {
+    console.error('❌ Brevo API failed:', error.message);
+    throw error;
+  }
+};
+
+// Create SMTP transporter (fallback)
 const createTransporter = () => {
   const host = process.env.SMTP_HOST || 'smtp.gmail.com';
   const port = parseInt(process.env.SMTP_PORT) || 587;
@@ -15,7 +65,7 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     host: host,
     port: port,
-    secure: port === 465, // True for 465 (SSL), false for other ports (STARTTLS)
+    secure: port === 465,
     auth: {
       user: user,
       pass: process.env.SMTP_PASS
@@ -23,14 +73,20 @@ const createTransporter = () => {
   });
 };
 
-// Send email
+// Send email - tries API first, falls back to SMTP
 const sendEmail = async ({ to, subject, html, text }) => {
-  // Skip in development if no SMTP configured
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.log('Email would be sent:', { to, subject });
+  // Skip in development if no email configured
+  if (!process.env.BREVO_API_KEY && !process.env.SMTP_USER) {
+    console.log('📧 Email would be sent (dev mode):', { to, subject });
     return { messageId: 'dev-mode-skip' };
   }
 
+  // Try Brevo API first (recommended - bypasses port blocking)
+  if (process.env.BREVO_API_KEY) {
+    return sendEmailViaAPI({ to, subject, html, text });
+  }
+
+  // Fallback to SMTP
   const transporter = createTransporter();
 
   const mailOptions = {
@@ -42,12 +98,12 @@ const sendEmail = async ({ to, subject, html, text }) => {
   };
 
   try {
-    console.log('📤 Attempting to send email to:', to);
+    console.log('📤 Attempting to send email via SMTP to:', to);
     const result = await transporter.sendMail(mailOptions);
-    console.log('✅ Email sent successfully:', result.messageId);
+    console.log('✅ Email sent successfully via SMTP:', result.messageId);
     return result;
   } catch (error) {
-    console.error('❌ Email send failed:', {
+    console.error('❌ SMTP send failed:', {
       code: error.code,
       message: error.message,
       command: error.command
